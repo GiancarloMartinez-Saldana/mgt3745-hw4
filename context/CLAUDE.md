@@ -1,26 +1,16 @@
-# CLAUDE.md
+# Claude instructions
 
-Always-on instructions for any agent working in this repository. Read
-STANDARDS.md for the human version; this file restates it as rules an
-agent follows without being asked.
+Status: ACTIVE in Module 3.
 
-## Read first
+This project is a subscription cost dashboard: users enter streaming
+services and prices, and the app displays a running monthly total.
 
-PROJECT.md, FEATURES.md, ARCHITECTURE.md, STANDARDS.md, TOOLS.md, STYLE.md.
-Do not read /curiosity unless asked.
+These are the same rules as STANDARDS.md, restated as instructions for an agent. If this file and STANDARDS.md disagree, STANDARDS.md is the source of truth.
 
-## Rules
+1. When naming variables and functions, use camelCase and choose names that describe what the value holds or what the function does in domain terms (e.g. `service`, `price`, `saveNotes`). Do not use single letters or generic names like `data` or `x`.
 
-- Never use `innerHTML` with user input. Use `textContent`.
-- Never build SQL by concatenating strings. Use `prepare(...).bind(...)`.
-- Never write a credential, token, or key into any file in this repository.
-- Never add a dependency without adding a row to TOOLS.md.
-- Every new endpoint implements an EARS statement in FEATURES.md. Quote it in a comment.
-- Handle failed responses on the page. Never throw to the console.
-- Prefer the boring choice. Name any innovation token you spend in an ADR.
-- Small diffs. One concern per commit. Explain why in the message.
+2. Keep structure, presentation, and behavior in separate files: HTML markup only in `index.html`, CSS only in `styles.css`, JavaScript only in `app.js`. Do not write inline styles. Do not add any `<script>` content to the HTML beyond the tag loading `app.js`.
 
-## When unsure
+3. When writing comments, explain why the code exists or why a decision was made. Do not write a comment that only restates what the next line does.
 
-Ask, in a comment or in the chat, rather than guessing. Say what you could
-not verify.
+4. Never use `innerHTML` to render text that came from user input. Always use `textContent` instead, so user-typed content is never interpreted as HTML or executed as a script.
