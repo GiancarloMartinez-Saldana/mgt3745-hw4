@@ -12,6 +12,12 @@ Status: ACTIVE in Module 3. Adapt these rules to your feature and follow them.
 
 5. **Forbidden pattern.** Never use `innerHTML` to display text a user typed. Always use `textContent`, so user input can never be interpreted as HTML or executed as a script.
 
+6. **(HW4) SQL parameters.** User values reach SQL through `prepare(...).bind(...)`, never string concatenation or template literals. A service name is data, never part of the query.
+
+7. **(HW4) No credentials in the repository.** Not in code, not in config, not in a context file. The wrangler login token stays in the Codespace. Database ids are addresses, not keys, and may appear in `wrangler.toml`.
+
+8. **(HW4) Failures are shown, not thrown.** A failed request (unreachable server, 400, 500) is shown to the user on the page in plain words, and what they typed is kept. It is never left as an uncaught error in the console.
+
 **Source of truth:** If STANDARDS.md and CLAUDE.md ever disagree, STANDARDS.md wins. It's written for a human to read and agree to first; CLAUDE.md is a restatement of the same rules for an agent, not an independent source of authority.
 
 ## Split Test
