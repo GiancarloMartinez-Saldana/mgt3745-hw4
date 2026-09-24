@@ -12,11 +12,11 @@
 //   CORS        headers that tell the browser your page is allowed to call this Worker
 
 // Narrowed from "*" (HW4 Craft credit): only these page origins may call the
-// Worker from a browser. Add your Codespace's Live Server origin (the
-// https://...-5500.app.github.dev address in the Ports tab) before the demo.
-// curl is not a browser and ignores CORS; this protects users, not the table.
+// Worker from a browser. Before deploying, add the Live Server origin from the
+// Codespace Ports tab (https://<codespace-name>-5500.app.github.dev, no
+// trailing slash). curl is not a browser and ignores CORS; this protects
+// users from other sites calling the Worker, not the table from curl.
 const ALLOWED_ORIGINS = [
-  "https://giancarlomartinez-saldana.github.io",
   "http://127.0.0.1:5500",
   "http://localhost:5500",
 ];
