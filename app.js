@@ -1,90 +1,157 @@
-// app.js
-// Behavior and data. Three functions: load, save, render. Same shape as HW3.
-// What changed in HW4 is where load and save go: two lines, plus what
-// happens when they fail. Everything else that changes is a consequence of
-// those two lines, and that is what HW4 asks you to write down.
+(() => {
+  'use strict';
 
-// Paste your deployed Worker URL here after `npx wrangler deploy`.
-const API = "https://mgt3745-hw4.YOUR-SUBDOMAIN.workers.dev";
+  // HW4: subscriptions now live in Cloudflare D1 behind the Worker (ADR-002).
+  // Paste your deployed Worker URL here after `npx wrangler deploy`.
+  const deployedApi = 'https://mgt3745-hw4.YOUR-SUBDOMAIN.workers.dev';
+  // A page served from this machine talks to `npm run dev` instead, so the
+  // failure modes in FEATURES.md can be tested without touching the real table.
+  const isLocalPage = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  // The query switch makes "server unreachable" repeatable: nothing listens on port 9.
+  const simulateServerDown = new URLSearchParams(window.location.search).has('serverDown');
+  const api = simulateServerDown ? 'http://127.0.0.1:9'
+    : isLocalPage ? 'http://127.0.0.1:8787'
+    : deployedApi;
 
-// ---- HW3, for the record (superseded by ADR-002) ------------------------
-// function load()      { return JSON.parse(localStorage.getItem("entries") || "[]"); }
-// function save(list)  { localStorage.setItem("entries", JSON.stringify(list)); }
-// -------------------------------------------------------------------------
+  // ---- HW3, for the record (superseded by ADR-002) ------------------------
+  // loadNotes: JSON.parse(window.localStorage.getItem(storageKey))
+  // saveNotes: window.localStorage.setItem(storageKey, JSON.stringify(nextNotes))
+  // -------------------------------------------------------------------------
 
-const form = document.getElementById("entry-form");
-const input = document.getElementById("entry-text");
-const list = document.getElementById("entry-list");
-const status = document.getElementById("status");
+  const noteForm = document.querySelector('#note-form');
+  const noteInput = document.querySelector('#note-input');
+  const priceInput = document.querySelector('#price-input');
+  const noteList = document.querySelector('#note-list');
+  const noteError = document.querySelector('#note-error');
+  const saveStatus = document.querySelector('#save-status');
+  const emptyState = document.querySelector('#empty-state');
+  const spendTotal = document.querySelector('#spend-total');
+  let notes = [];
 
-function showError(message) {
-  // The user sees it on the page. Nothing is thrown in the console.
-  status.textContent = message;
-}
-
-function clearError() {
-  status.textContent = "";
-}
-
-async function load() {
-  const res = await fetch(API + "/entries");
-  if (!res.ok) { showError("could not load entries"); return []; }
-  return res.json();
-}
-
-async function save(entry) {
-  const res = await fetch(API + "/entries", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(entry),
-  });
-  if (!res.ok) {
-    // The Worker's 400 path sends a short reason in the body. Show it.
-    const reason = await res.text();
-    showError("could not save: " + (reason || res.status));
-    return false;
+  function showError(message) {
+    // The user sees it on the page. Nothing is thrown in the console.
+    noteError.textContent = message;
+    saveStatus.textContent = '';
   }
-  return true;
-}
 
-function render(entries) {
-  // Unchanged from HW3. textContent, never innerHTML.
-  // The server does not get to write HTML into your page either.
-  list.replaceChildren();
-  for (const entry of entries) {
-    const li = document.createElement("li");
-    const text = document.createElement("span");
-    text.textContent = entry.text;
-    const when = document.createElement("time");
-    when.textContent = entry.created_at || "";
-    li.append(text, when);
-    list.append(li);
-  }
-}
-
-async function refresh() {
-  clearError();
-  try {
-    render(await load());
-  } catch {
-    // The network itself failed (offline, DNS, CORS). fetch throws here.
-    showError("could not reach the server");
-  }
-}
-
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  clearError();
-  const entry = { text: input.value.trim() };
-  try {
-    const ok = await save(entry);
-    if (ok) {
-      input.value = "";
-      await refresh();
+  async function loadNotes() {
+    const response = await fetch(api + '/entries');
+    if (!response.ok) {
+      showError('Could not load your subscriptions (server said ' + response.status + '). Try reloading.');
+      return [];
     }
-  } catch {
-    showError("could not reach the server");
+    return response.json();
   }
-});
 
-refresh();
+  async function saveNote(entry) {
+    const response = await fetch(api + '/entries', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(entry),
+    });
+    if (!response.ok) {
+      // The Worker's 400 path sends a short reason in the body. Show it.
+      const reason = await response.text();
+      showError('Could not save: ' + (reason || response.status) + '. Your entry is still here.');
+      return false;
+    }
+    return true;
+  }
+
+  async function deleteNote(id) {
+    const response = await fetch(api + '/entries/' + encodeURIComponent(id), { method: 'DELETE' });
+    if (!response.ok) {
+      showError('Could not delete that subscription. Nothing was changed.');
+      return false;
+    }
+    return true;
+  }
+
+  function formatPrice(price) {
+    return price.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+  }
+
+  function renderNotes() {
+    noteList.replaceChildren();
+    emptyState.hidden = notes.length > 0;
+
+    const total = notes.reduce((sum, entry) => sum + entry.price, 0);
+    spendTotal.textContent = notes.length > 0
+      ? `Total monthly spend: ${formatPrice(total)}`
+      : '';
+
+    notes.forEach((note, index) => {
+      const listItem = document.createElement('li');
+      const noteText = document.createElement('span');
+      // textContent, never innerHTML: the server does not get to write HTML into the page either.
+      noteText.textContent = `${note.service} — ${formatPrice(note.price)}/mo`;
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.textContent = 'Delete';
+      deleteButton.setAttribute('aria-label', `Delete subscription ${index + 1}: ${note.service}`);
+      deleteButton.addEventListener('click', async () => {
+        try {
+          if (!(await deleteNote(note.id))) return;
+          await refresh();
+          saveStatus.textContent = 'Subscription deleted.';
+          noteInput.focus();
+        } catch {
+          showError('Could not reach the server. Nothing was deleted.');
+        }
+      });
+      listItem.append(noteText, deleteButton);
+      noteList.append(listItem);
+    });
+  }
+
+  async function refresh() {
+    try {
+      notes = await loadNotes();
+    } catch {
+      // The network itself failed (offline, DNS, CORS). fetch throws here.
+      showError('Could not reach the server. Your subscriptions are safe; try again shortly.');
+      notes = [];
+    }
+    renderNotes();
+  }
+
+  noteForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const service = noteInput.value.trim();
+    const characterCount = Array.from(service).length;
+    const price = Number(priceInput.value);
+
+    if (characterCount < 1 || characterCount > 200) {
+      noteError.textContent = 'Enter a service name containing 1–200 characters.';
+      noteInput.setAttribute('aria-invalid', 'true');
+      saveStatus.textContent = '';
+      noteInput.focus();
+      return;
+    }
+    if (!Number.isFinite(price) || price <= 0) {
+      noteError.textContent = 'Enter a monthly price greater than 0.';
+      priceInput.setAttribute('aria-invalid', 'true');
+      saveStatus.textContent = '';
+      priceInput.focus();
+      return;
+    }
+    noteInput.removeAttribute('aria-invalid');
+    priceInput.removeAttribute('aria-invalid');
+    noteError.textContent = '';
+
+    try {
+      // Only clear the inputs after the server confirms, same rule as HW3.
+      if (!(await saveNote({ service, price }))) return;
+    } catch {
+      showError('Could not reach the server. Your entry is still here; try again.');
+      return;
+    }
+    await refresh();
+    noteInput.value = '';
+    priceInput.value = '';
+    noteInput.focus();
+    saveStatus.textContent = 'Subscription saved.';
+  });
+
+  refresh();
+})();
