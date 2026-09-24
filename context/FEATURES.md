@@ -85,5 +85,40 @@ I asked a reader (Claude) to check FEATURES.md against the "could two competent 
 | 6 | Unwanted: invalid service name or price rejected with a distinct error, entry not saved | PASS | Tested empty service name and $0/negative price separately; each produced a distinct, correct error message and no invalid entry was saved. |
 | 7 | State-driven: failed save preserves the entry and leaves prior list/total unchanged | PASS | Tested with `?failSave` in the URL; correct error message shown, entry remained in the input field, and the previously saved list and total were unmodified. |
 
+## HW4: Acceptance additions (EARS)
+
+HW4 moves F-01/F-05 storage from localStorage to Cloudflare D1 (ADR-002). These statements cover the new server and the failures it brings. Each Worker endpoint quotes its statement in a comment in `worker.js`.
+
+- **U-HW4-0 (Ubiquitous):** THE SYSTEM SHALL return all saved subscriptions in creation order.
+- **E-HW4-1 (Event-driven):** WHEN a valid subscription is submitted, THE SYSTEM SHALL store it on the server and confirm it on the page.
+- **E-HW4-2 (Event-driven):** WHEN the user removes a subscription, THE SYSTEM SHALL delete it on the server so the total no longer includes it.
+- **S-HW4-3 (Ubiquitous):** THE SYSTEM SHALL return stored subscriptions to any browser, including one whose site data was cleared.
+- **U-HW4 (Unwanted, the HW4 validation rule in `worker.js`):** IF a submitted price is not a number greater than 0, THEN THE SYSTEM SHALL reject it and say why. *Why it's on the server too:* the page already checks this (HW3 statement 6), but anyone can `POST` with `curl`. One bad price would corrupt the total every user sees. The D1 column has `CHECK (price > 0)` as a backstop.
+- **U-HW4-5 (Unwanted):** IF the service name is missing, empty, or longer than 200 characters, THEN THE SYSTEM SHALL reject it and say why.
+- **U-HW4-6 (Unwanted):** IF the server can't be reached or returns an error, THEN THE SYSTEM SHALL tell the user on the page, keep what they typed, and not throw in the console.
+
+## HW4: Verification
+
+**How it was walked (9/24/26):** against `npm run dev` (the real `worker.js` on wrangler's local D1 emulator), with the page served on `http://127.0.0.1:5500`. Browser steps were scripted with Playwright (Chromium). Worker responses were checked with `curl`. **The deployed Worker hasn't been walked yet**, because the Cloudflare login and deploy happen in my Codespace (see README → How to Run). After deploying, I re-walk rows 1–4 on the deployed URL and update this table.
+
+| Statement | HW3 verdict | HW4 verdict | Reason / evidence |
+|---|---|---|---|
+| Return entries in order (U-HW4-0) | PASS | PASS | `GET /entries` returned `[]` when empty, then rows in id order after three `POST`s. |
+| Store valid entry (E-HW4-1) | PASS | PASS | `POST {"service":"Netflix","price":20}` returned `201`. The page showed Netflix, Hulu, and Spotify with a total of $48.00. |
+| Reject missing text / invalid name (U-HW4-5) | PASS (page only) | PASS | The page rejects an empty name before sending. The server rejects a missing name and a 201-character name with `400 service name must be 1-200 characters`. |
+| **Reject non-positive price (U-HW4, new rule)** | PASS (page only) | PASS | `price: 0`, `-3`, and `"12"` (a string) each returned `400 price must be a number greater than 0`. A forced 400 on the page showed "Could not save: price must be a number greater than 0. Your entry is still here." and kept the input. |
+| Survive cleared cache (S-HW4-3) | CANNOT TEST YET | PASS | Cleared all site data for the page origin (cookies, localStorage, and the rest), reloaded, and all three entries plus the $48.00 total came back. A second, fresh browser profile saw the same three. See [docs/see-it-work.gif](../docs/see-it-work.gif). |
+| Delete updates total (E-HW4-2) | PASS | PASS | Deleting Hulu took the total to $35.00. `DELETE /entries/99` returned `404 no such entry`. |
+| Server unreachable (U-HW4-6) | — | PASS | Simulated with `?serverDown` (the page points at port 9, where nothing listens). The page showed "Could not reach the server. Your subscriptions are safe; try again shortly." and nothing was thrown in the console. See [docs/server-unreachable.png](../docs/server-unreachable.png). DevTools → Network → Offline works on the deployed page too. |
+| Server returns 500 (U-HW4-6) | — | PASS | Ran the Worker with no D1 binding: it returned `500 server error: no D1 binding. Check database_id...`. A forced 500 on the page showed "Could not load your subscriptions (server said 500). Try reloading." |
+| Server returns 400 (U-HW4-6) | — | PASS | Invalid JSON returned `400 body must be JSON`. A `null` body returned `400 body must be a JSON object`. The page shows the server's reason (see the price row). |
+| User values can't rewrite the SQL | — | PASS | A service name of `x'); DROP TABLE entries;--` was stored as plain text and the table survived, because every value goes through `bind()`. |
+| HTML in a name is not executed | PASS | PASS | A name of `<img src=x onerror=alert(1)>` rendered as text, with no `<img>` in the DOM (`textContent`). |
+| CORS limited to my page | — | PASS | A preflight from `http://127.0.0.1:5500` got `Access-Control-Allow-Origin` echoed back. A preflight from `https://evil.example` got no allow-origin header, so the browser blocks it. |
+| Second client writes to the same table | — | DEFERRED | Two browsers do share one table (verified above), but there's no per-user separation or conflict handling. ADR-002 defers private lists to ADR-003. |
+| HW3 #5: renewal date shown | FAIL | FAIL | Still not built. Out of scope for HW4, which changed where data lives, not what is collected. |
+
 ## AI assistance
 I asked it to help me have arrows for clear visuals. It also helped me organize all my points to develop my kano hypotheses and other structural details. Lastly I made a new chat and dropped in all of the assignment info and what I wrote and asked it to be my peer because it is late on a Thursday (I hope this is allowed), and I knew it would be a more thorough check anyways.
+
+**HW4:** Claude Code (Anthropic's coding agent, run from claude.ai) drafted the HW4 statements and ran the verification walk above: `curl` against the local Worker, plus a scripted Playwright browser. The verdicts come from that run's output, not from reading the code. The deployed-URL walk is still mine to do.
