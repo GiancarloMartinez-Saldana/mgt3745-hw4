@@ -34,6 +34,7 @@ Score notes (score → weighted):
 **Title and date:** ADR-002 — Store subscriptions in Cloudflare D1 behind a Worker, September 24, 2026
 **Status:** Accepted
 **Supersedes:** ADR-001
+**Door / concrete acquisition and execution choice:** Build. My own Cloudflare Worker (`worker.js`) and one D1 table (`schema.sql`) on Cloudflare's free plan, deployed with wrangler from my Codespace. The code was drafted by Claude Code and deployed and tested by me (see README → AI Use).
 
 ### Context
 
