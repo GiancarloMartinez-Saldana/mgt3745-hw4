@@ -99,7 +99,7 @@ HW4 moves F-01/F-05 storage from localStorage to Cloudflare D1 (ADR-002). These 
 
 ## HW4: Verification
 
-**How it was walked (9/24/26):** against `npm run dev` (the real `worker.js` on wrangler's local D1 emulator), with the page served on `http://127.0.0.1:5500`. Browser steps were scripted with Playwright (Chromium). Worker responses were checked with `curl`. **The deployed Worker hasn't been walked yet**, because the Cloudflare login and deploy happen in my Codespace (see README → How to Run). After deploying, I re-walk rows 1–4 on the deployed URL and update this table.
+**How it was walked (9/24/26):** against `npm run dev` (the real `worker.js` on wrangler's local D1 emulator), with the page served on `http://127.0.0.1:5500`. Browser steps were scripted with Playwright (Chromium). Worker responses were checked with `curl`. The three rows a user can see (return entries in order, store a valid entry, survive a cleared cache) were then re-walked on the deployed Worker on 9/24/26 and passed (see [docs/see-it-work-deployed.gif](../docs/see-it-work-deployed.gif)). The other rows stand on the local walk of the same `worker.js`.
 
 | Statement | HW3 verdict | HW4 verdict | Reason / evidence |
 |---|---|---|---|

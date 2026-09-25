@@ -43,7 +43,7 @@ flowchart LR
 
 ## How to Run
 
-Deployed: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev/entries> ← replace with the URL `npx wrangler deploy` prints. It should return `[]` or a list of entries, never an error.
+Deployed: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev/entries>. It returns `[]` or a list of entries, never an error.
 
 From a fresh Codespace:
 
@@ -70,23 +70,25 @@ To run everything locally instead: `npx wrangler d1 execute mgt3745-entries --lo
 
 | Feature | EARS statement | Verdict |
 |---|---|---|
-| Save a subscription | WHEN a valid subscription is submitted, THE SYSTEM SHALL store it on the server and confirm it on the page | PASS (local) |
-| Reject a bad price (HW4 rule) | IF a submitted price is not a number greater than 0, THEN THE SYSTEM SHALL reject it and say why | PASS (local) |
-| Reject a bad name | IF the service name is missing, empty, or longer than 200 characters, THEN THE SYSTEM SHALL reject it and say why | PASS (local) |
-| Survive cleared cache | THE SYSTEM SHALL return stored subscriptions to any browser, including one whose site data was cleared | PASS (local) |
-| Delete updates total | WHEN the user removes a subscription, THE SYSTEM SHALL delete it on the server so the total no longer includes it | PASS (local) |
-| Network down / 500 / 400 | IF the server can't be reached or returns an error, THEN THE SYSTEM SHALL tell the user on the page | PASS (local) |
+| Save a subscription | WHEN a valid subscription is submitted, THE SYSTEM SHALL store it on the server and confirm it on the page | PASS |
+| Reject a bad price (HW4 rule) | IF a submitted price is not a number greater than 0, THEN THE SYSTEM SHALL reject it and say why | PASS |
+| Reject a bad name | IF the service name is missing, empty, or longer than 200 characters, THEN THE SYSTEM SHALL reject it and say why | PASS |
+| Survive cleared cache | THE SYSTEM SHALL return stored subscriptions to any browser, including one whose site data was cleared | PASS |
+| Delete updates total | WHEN the user removes a subscription, THE SYSTEM SHALL delete it on the server so the total no longer includes it | PASS |
+| Network down / 500 / 400 | IF the server can't be reached or returns an error, THEN THE SYSTEM SHALL tell the user on the page | PASS |
 | Two clients, one table | Private per-user lists | DEFERRED (ADR-002 → ADR-003) |
 | Renewal date (HW3 #5) | Where a renewal date is given, THE SYSTEM SHALL display it | FAIL (not built, unchanged from HW3) |
 
-"Local" means walked against `npm run dev` on 9/24. The full verification
+Saving and surviving a cleared cache were walked on the deployed Worker on 9/24
+(GIF above); the validation, delete and failure rows were walked against the same
+`worker.js` locally with `npm run dev`. The full verification
 table, including SQL injection, XSS, and CORS checks, is in
 [FEATURES.md](context/FEATURES.md#hw4-verification).
 
 ## Links
 
 - HW3 repository (as submitted): <https://github.com/GiancarloMartinez-Saldana/mgt3745-hw3>
-- Deployed Worker: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev>
+- Deployed Worker: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev/entries>
 
 Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 [USERS.md](context/USERS.md) → [FEATURES.md](context/FEATURES.md) →
