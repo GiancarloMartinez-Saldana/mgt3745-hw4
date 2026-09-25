@@ -102,7 +102,7 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 - made a checklist for all the tasks I needed to accomplish
 - helped fix my error when I couldn't get the website to load in
 - dragged my hw-3 files into the codespace
-- helped me find an app to screen record to create a gif for my "see_it_work" in vscode
+- helped me find an app to screen record to create a gif for my "see_it_work" in vscode. Moving them into .vscode was a mistake that claude also helped me fix :)
 
 **What was checked, and how?** 
 - I ran the website immediately proceeding Claudes requested fixes and tweaked anything necessary
