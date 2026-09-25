@@ -105,6 +105,7 @@ claude.ai) did the HW4 build on a branch:
 - added the price validation rule, `DELETE`, and the CORS allow-list
 - rewired `app.js` from localStorage to `fetch`
 - drafted the Gate rerun, ADR-002, the TOOLS.md rows, the STYLE.md tokens and refusals, and the HW4 verification table
+- helped me find an app to screen record to create a gif for my "see_it_work" in vscode
 
 **What was checked, and how?** The agent ran the real `worker.js` under
 `wrangler dev` with a local D1. It hit every path with `curl`: 201, each
@@ -124,4 +125,4 @@ request. I can read every line of `worker.js`, but not the platform under
 it. That's why TOOLS.md records the crossing, and why the page tells users
 to enter fictional data.
 
-Hours spent: ___.
+Hours spent: 11.
