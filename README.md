@@ -103,7 +103,6 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 - helped fix my error when I couldn't get the website to load in
 - dragged my hw-3 files into the codespace
 - helped me find an app to screen record to create a gif for my "see_it_work" in vscode. Moving them into .vscode was a mistake that claude also helped me fix :)
-- Wrote the initial worker.js, app.js, and schema.sql to get me started with a solid foundation
 - drafted parts of tools.md and style.md as well as the verification table
 
 **What was checked, and how?** 
@@ -114,5 +113,6 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 **What could not be fully verified?** 
 - I tried to use cowork when it helped me transfer my files and it worked but on a different branch so I had to pull that info into main. After that I deleted the old branch, but I don't know if that does anything I asked google and claude and they said it has no affect and there was none that I could see, but it just felt off I need to learn to prompt that better.
 - For the Worker specifically, I can't inspect **D1 itself**: where Cloudflare physically stores the rows, how it copies them, and what it logs about each request. I can read every line of `worker.js`, but not the platform under it. That's why TOOLS.md records the crossing and the page tells users to enter fictional data.
+- For the Worker, I didn't understand what the CORS allow-list the agent wrote actually did. So I removed my Codespace origin from ALLOWED_ORIGINS, redeployed, and watched the page fail with a CORS error in the console, then put it back and it worked again. That showed me the Worker only answers pages on that list.
 
 Hours spent: 13.
