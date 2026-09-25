@@ -116,7 +116,13 @@ HW4 moves F-01/F-05 storage from localStorage to Cloudflare D1 (ADR-002). These 
 | HTML in a name is not executed | PASS | PASS | A name of `<img src=x onerror=alert(1)>` rendered as text, with no `<img>` in the DOM (`textContent`). |
 | CORS limited to my page | — | PASS | A preflight from `http://127.0.0.1:5500` got `Access-Control-Allow-Origin` echoed back. A preflight from `https://evil.example` got no allow-origin header, so the browser blocks it. |
 | Second client writes to the same table | — | DEFERRED | Two browsers do share one table (verified above), but there's no per-user separation or conflict handling. ADR-002 defers private lists to ADR-003. |
-| HW3 #5: renewal date shown | FAIL | FAIL | Still not built. Out of scope for HW4, which changed where data lives, not what is collected. |
+| HW3 #1 (Ubiquitous): no pirated content in Safe pick / Something new | CANNOT TEST YET | CANNOT TEST YET | Still true for the same reason: F-02/F-03 were never built (ADR-001 scope). Moving storage to a server doesn't create those flows. |
+| HW3 #2 (Event-driven): adding a subscription updates the total within 2 seconds | PASS | PASS | The total now comes back from the server after each save. In the scripted local run each add showed the new total before the next step. On the deployed page the $48.00 total loaded with the list (see the GIF). Not timed with a stopwatch against the 2-second limit. |
+| HW3 #3 (State-driven): "What should I watch?" disabled with zero entries | CANNOT TEST YET | CANNOT TEST YET | The button belongs to F-02/F-03, which are still not built. |
+| HW3 #4 (Unwanted): zero filter matches show a no-matches message | CANNOT TEST YET | CANNOT TEST YET | The mood/format filter (F-03) is still not built. |
+| HW3 #5 (Optional): renewal date shown | FAIL | FAIL | Still not built. Out of scope for HW4, which changed where data lives, not what is collected. |
+| HW3 #6 (Unwanted): invalid name or price rejected with a distinct message, not saved | PASS | PASS | The page still gives a distinct message for an empty name and for a $0 or negative price, and sends nothing. The Worker now enforces the same two rules with its own 400 messages (rows above). |
+| HW3 #7 (State-driven): a failed save keeps the entry and leaves the list and total unchanged | PASS | PASS | HW3 tested this with `?failSave`. In HW4 a forced 400 from the server showed "Could not save: … Your entry is still here." The typed name stayed in the input, and the list and total were not redrawn. |
 
 ## AI assistance
 I asked it to help me have arrows for clear visuals. It also helped me organize all my points to develop my kano hypotheses and other structural details. Lastly I made a new chat and dropped in all of the assignment info and what I wrote and asked it to be my peer because it is late on a Thursday (I hope this is allowed), and I knew it would be a more thorough check anyways.
