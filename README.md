@@ -21,9 +21,6 @@ server. Deleting one recalculates the total to $35.00.
 
 ![Subscription dashboard: three subscriptions saved, site data cleared, page reloaded, all three still there with a $48.00 total](docs/see-it-work.gif)
 
-*Recorded against `npm run dev` (the same `worker.js` on wrangler's local D1
-emulator), since this GIF was made before the Cloudflare deploy. Replace it
-with a recording against the deployed URL once it's live.*
 
 Server unreachable, simulated with `?serverDown`:
 
