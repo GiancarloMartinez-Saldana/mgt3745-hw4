@@ -3,7 +3,7 @@
 
   // HW4: subscriptions now live in Cloudflare D1 behind the Worker (ADR-002).
   // Paste your deployed Worker URL here after `npx wrangler deploy`.
-  const deployedApi = 'https://mgt3745-hw4.YOUR-SUBDOMAIN.workers.dev';
+  const deployedApi = 'https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev';
   // A page served from this machine talks to `npm run dev` instead, so the
   // failure modes in FEATURES.md can be tested without touching the real table.
   const isLocalPage = ['localhost', '127.0.0.1'].includes(window.location.hostname);

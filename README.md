@@ -45,7 +45,7 @@ flowchart LR
 
 ## How to Run
 
-Deployed: *`https://mgt3745-hw4.YOUR-SUBDOMAIN.workers.dev/entries`* ← replace with the URL `npx wrangler deploy` prints. It should return `[]` or a list of entries, never an error.
+Deployed: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev/entries> ← replace with the URL `npx wrangler deploy` prints. It should return `[]` or a list of entries, never an error.
 
 From a fresh Codespace:
 
@@ -88,7 +88,7 @@ table, including SQL injection, XSS, and CORS checks, is in
 ## Links
 
 - HW3 repository (as submitted): <https://github.com/GiancarloMartinez-Saldana/mgt3745-hw3>
-- Deployed Worker: *paste after deploy*
+- Deployed Worker: <https://mgt3745-hw4.mgt3745-hw4-giancarlo.workers.dev>
 
 Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 [USERS.md](context/USERS.md) → [FEATURES.md](context/FEATURES.md) →

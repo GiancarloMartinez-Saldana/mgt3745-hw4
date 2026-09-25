@@ -12,4 +12,4 @@ binding = "DB"
 database_name = "mgt3745-entries"
 # After `npx wrangler d1 create mgt3745-entries`, paste the database_id it
 # prints between the quotes below. Keep the quotes. Change nothing else.
-database_id = "PASTE_ID_HERE"
+database_id = "d538b8db-9777-4074-b2a1-917a378653b0"
