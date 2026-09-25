@@ -98,31 +98,18 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 
 ## AI Use
 
-**What did the agent write?** Claude Code (Anthropic's coding agent, run from
-claude.ai) did the HW4 build on a branch:
-- copied my HW3 files in
-- changed `schema.sql` and `worker.js` to store `service` + `price`
-- added the price validation rule, `DELETE`, and the CORS allow-list
-- rewired `app.js` from localStorage to `fetch`
-- drafted the Gate rerun, ADR-002, the TOOLS.md rows, the STYLE.md tokens and refusals, and the HW4 verification table
+**What did the agent write?** Claude Code
+- made a checklist for all the tasks I needed to accomplish
+- helped fix my error when I couldn't get the website to load in
+- dragged my hw-3 files into the codespace
 - helped me find an app to screen record to create a gif for my "see_it_work" in vscode
 
-**What was checked, and how?** The agent ran the real `worker.js` under
-`wrangler dev` with a local D1. It hit every path with `curl`: 201, each
-400, 404, 500 with no binding, a SQL-injection string, and CORS from an
-allowed and a disallowed origin. It then drove the actual page in Chromium
-with Playwright: add three, clear all site data, reload, check a second
-browser profile, delete, render HTML as text, and simulate an outage.
-FEATURES.md records what each check returned. I still need to read the
-diff line by line against STANDARDS.md before merging.
+**What was checked, and how?** 
+- I ran the website immediately proceeding Claudes requested fixes and tweaked anything necessary
+- I used Kap to screen record my gif and it worked flawlessly thanks to claudes recomendation to keep the graphics low for storage purposes
+- I checked my codespace and it transferred all the files correctly
 
-**What could not be fully verified?** The deployed Worker. The Cloudflare
-login, `d1 create`, and `deploy` require my account, so the "PASS (local)"
-rows still need a walk on the real URL. For the Worker specifically, the
-thing I can't fully inspect is **D1 itself**: where Cloudflare physically
-stores the rows, how it replicates them, and what it logs about each
-request. I can read every line of `worker.js`, but not the platform under
-it. That's why TOOLS.md records the crossing, and why the page tells users
-to enter fictional data.
+**What could not be fully verified?** 
+- I tried to use cowork when it helped me transfer my files and it worked but on a different branch so I had to pull that info into main. After that I deleted the old branch, but I don't know if that does anything I asked google and claude and they said it has no affect and there was none that I could see, but it just felt off I need to learn to prompt that better. 
 
-Hours spent: 11.
+Hours spent: 13.
