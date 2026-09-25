@@ -43,5 +43,5 @@ places my interviewees described getting stuck (USERS.md, INT-01/INT-02).
 
 ## Sources
 
-- Admired: *the calm, list-first layout of a plain bank or budgeting statement page; add a screenshot as `docs/style-admired.png`.*
-- Resented: *a streaming service home screen with autoplay previews, and its multi-step cancel flow; add a screenshot as `docs/style-resented.png`.*
+- Admired: iPhone Settings → Subscriptions: a calm, plain list of each service and its price, nothing autoplaying, the same job my dashboard does ([screenshot](../docs/style-admired.png))
+- Resented: Netflix home screen: the autoplaying preview banner competes for attention while you're deciding what to watch ([screenshot](../docs/style-resented.png))
