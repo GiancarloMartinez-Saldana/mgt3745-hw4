@@ -110,6 +110,7 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 - I checked my codespace and it transferred all the files correctly
 
 **What could not be fully verified?** 
-- I tried to use cowork when it helped me transfer my files and it worked but on a different branch so I had to pull that info into main. After that I deleted the old branch, but I don't know if that does anything I asked google and claude and they said it has no affect and there was none that I could see, but it just felt off I need to learn to prompt that better. 
+- I tried to use cowork when it helped me transfer my files and it worked but on a different branch so I had to pull that info into main. After that I deleted the old branch, but I don't know if that does anything I asked google and claude and they said it has no affect and there was none that I could see, but it just felt off I need to learn to prompt that better.
+- For the Worker specifically, I can't inspect **D1 itself**: where Cloudflare physically stores the rows, how it copies them, and what it logs about each request. I can read every line of `worker.js`, but not the platform under it. That's why TOOLS.md records the crossing and the page tells users to enter fictional data.
 
 Hours spent: 13.
