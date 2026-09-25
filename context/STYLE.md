@@ -43,5 +43,5 @@ places my interviewees described getting stuck (USERS.md, INT-01/INT-02).
 
 ## Sources
 
-- Admired: iPhone Settings → Subscriptions: a calm, plain list of each service and its price, nothing autoplaying, the same job my dashboard does ([screenshot](../docs/style-admired.png))
-- Resented: Netflix home screen: the autoplaying preview banner competes for attention while you're deciding what to watch ([screenshot](../docs/style-resented.png))
+- Admired: iPhone Settings → Subscriptions: a calm, plain list of each service and its price, nothing autoplaying, the same job my dashboard does ![iPhone Subscriptions screen listing each subscription and its price](../docs/style-admired.png)
+- Resented: Netflix home screen: the autoplaying preview banner competes for attention while you're deciding what to watch ![Netflix home screen with an autoplaying preview banner at the top which is overstimulating INT-01](../docs/style-resented))
