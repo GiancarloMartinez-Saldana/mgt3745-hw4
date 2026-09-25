@@ -15,11 +15,12 @@ up in any browser** ([ADR-002](context/ARCHITECTURE.md#adr-002-entries-move-from
 
 ## See It Work
 
-The GIF shows three subscriptions saved to D1 ($48.00), then all site data
-cleared and the page reloaded: the list and total come back from the
-server. Deleting one recalculates the total to $35.00.
+The GIF shows the deployed page with three subscriptions saved to D1
+($48.00). Then DevTools → Application → Clear site data, and a reload: the
+list and total come back from the server, because they no longer live in
+the browser.
 
-![Subscription dashboard: three subscriptions saved, site data cleared, page reloaded, all three still there with a $48.00 total](docs/see-it-work.gif)
+![Deployed subscription dashboard: three subscriptions saved, site data cleared, page reloaded, all three still there with a $48.00 total](docs/see-it-work-deployed.gif)
 
 
 Server unreachable, simulated with `?serverDown`:
