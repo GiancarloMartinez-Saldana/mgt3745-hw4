@@ -103,6 +103,8 @@ Reading order for a stranger: [PROJECT.md](context/PROJECT.md) →
 - helped fix my error when I couldn't get the website to load in
 - dragged my hw-3 files into the codespace
 - helped me find an app to screen record to create a gif for my "see_it_work" in vscode. Moving them into .vscode was a mistake that claude also helped me fix :)
+- Wrote the initial worker.js, app.js, and schema.sql to get me started with a solid foundation
+- drafted parts of tools.md and style.md as well as the verification table
 
 **What was checked, and how?** 
 - I ran the website immediately proceeding Claudes requested fixes and tweaked anything necessary
